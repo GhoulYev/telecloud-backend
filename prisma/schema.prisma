@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id Int @id
-  path String
+  id    Int    @id
+  path  String @unique @default(uuid())
   files File[]
 }
 
 model File {
-  id Int @id
-  filename String
-  user User @relation(fields: [ownerId], references: [id])
-  ownerId Int 
+  id       Int    @id @default(autoincrement())
+  fileName String @map("file_name")
+  filePath String @unique() @map("file_path")
+  ownerId  Int    @map("owner_id")
+  user     User   @relation(fields: [ownerId], references: [id])
 }
