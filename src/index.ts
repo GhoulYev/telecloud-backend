@@ -9,9 +9,13 @@ import { setPath } from './routers/setPath';
 import { getFiles } from './routers/getFiles';
 import { upload } from './routers/upload';
 import { download } from './routers/download';
+import { getUser } from './routers/getUser';
 
 dotenv.config();
 
+(BigInt.prototype as any).toJSON = function () {
+	return this.toString();
+};
 const prisma = new PrismaClient();
 
 const app = express();
@@ -59,7 +63,7 @@ const main = async () => {
 		}
 	);
 
-	app.get(
+	app.post(
 		'/getfiles',
 		oneOf([
 			body('path').trim().notEmpty().escape().isLowercase().isAlpha('en-US'),
@@ -109,6 +113,26 @@ const main = async () => {
 			if (errors.isEmpty()) {
 				download({
 					fileId: req.params!.fileId,
+					prisma,
+					res,
+				});
+			} else {
+				res.status(400).json({
+					status: 'error',
+					error: errors,
+				});
+			}
+		}
+	);
+
+	app.post(
+		'/getuser',
+		body('id').notEmpty().escape().isNumeric().toInt(),
+		(req, res) => {
+			const errors = validationResult(req);
+			if (errors.isEmpty()) {
+				getUser({
+					id: req.body.id,
 					prisma,
 					res,
 				});

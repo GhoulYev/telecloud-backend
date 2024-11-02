@@ -47,27 +47,6 @@ return 200 status code
 on error:
 return 400 status code
 
-### Set Path in DB
-
-sets the subdomain name to user
-
-Route: `/setpath`
-
-Method: `POST`
-
-JSON param
-
-```
-id: Integer
-path: String
-```
-
-successfully:
-return 200 status code
-
-on error:
-return 400 status code
-
 ### Retrieve All User Files
 
 returns all user files from the database in the form
@@ -80,7 +59,7 @@ files: Array of Files
 
 Route: `/getfiles`
 
-Method: `GET`
+Method: `POST`
 
 JSON param
 
@@ -92,6 +71,32 @@ path: String
 
 successfully:
 return 200 status code and files in json format
+
+on error:
+return 400 status code
+
+### Retrieve User
+
+return user from the database without files
+
+```
+id: Integer
+path: String
+files: Array of Files
+```
+
+Route: `/getuser`
+
+Method: `POST`
+
+JSON param
+
+```
+id: Integer
+```
+
+successfully:
+return 200 status code and user in json format
 
 on error:
 return 400 status code
