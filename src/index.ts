@@ -25,7 +25,9 @@ app.use(cors());
 const PORT = process.env.PORT ?? 3000;
 
 const main = async () => {
-	app.post(
+	const apiRouters = express.Router();
+
+	apiRouters.post(
 		'/register',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
@@ -44,7 +46,7 @@ const main = async () => {
 		}
 	);
 
-	app.post(
+	apiRouters.post(
 		'/setpath',
 		body('path').trim().notEmpty().escape().isLowercase().isAlpha('en-US'),
 		body('id').notEmpty().escape().isNumeric().toInt(),
@@ -63,7 +65,7 @@ const main = async () => {
 		}
 	);
 
-	app.post(
+	apiRouters.post(
 		'/getfiles',
 		oneOf([
 			body('path').trim().notEmpty().escape().isLowercase().isAlpha('en-US'),
@@ -84,7 +86,7 @@ const main = async () => {
 		}
 	);
 
-	app.post(
+	apiRouters.post(
 		'/upload',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		body('fileName').trim().notEmpty().isString(),
@@ -105,7 +107,7 @@ const main = async () => {
 		}
 	);
 
-	app.get(
+	apiRouters.get(
 		'/download/:fileId/',
 		param('fileId').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
@@ -125,7 +127,7 @@ const main = async () => {
 		}
 	);
 
-	app.post(
+	apiRouters.post(
 		'/getuser',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
@@ -144,6 +146,8 @@ const main = async () => {
 			}
 		}
 	);
+
+	app.use('/vlad', apiRouters);
 
 	app.listen(PORT, () =>
 		console.log(`WebServer has been started on ${PORT} port`)
