@@ -25,10 +25,8 @@ app.use(cors());
 const PORT = process.env.PORT ?? 3000;
 
 const main = async () => {
-	const apiRouters = express.Router();
-
-	apiRouters.post(
-		'/register',
+	app.post(
+		'/vlad/register',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
 			const errors = validationResult(req);
@@ -46,8 +44,8 @@ const main = async () => {
 		}
 	);
 
-	apiRouters.post(
-		'/setpath',
+	app.post(
+		'/vlad/setpath',
 		body('path').trim().notEmpty().escape().isLowercase().isAlpha('en-US'),
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
@@ -65,8 +63,8 @@ const main = async () => {
 		}
 	);
 
-	apiRouters.post(
-		'/getfiles',
+	app.post(
+		'/vlad/getfiles',
 		oneOf([
 			body('path').trim().notEmpty().escape().isLowercase().isAlpha('en-US'),
 			body('id').notEmpty().escape().isNumeric().toInt(),
@@ -86,8 +84,8 @@ const main = async () => {
 		}
 	);
 
-	apiRouters.post(
-		'/upload',
+	app.post(
+		'/vlad/upload',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		body('fileName').trim().notEmpty().isString(),
 		body('url').trim().notEmpty().isURL(),
@@ -107,8 +105,8 @@ const main = async () => {
 		}
 	);
 
-	apiRouters.get(
-		'/download/:fileId/',
+	app.get(
+		'/vlad/download/:fileId/',
 		param('fileId').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
 			const errors = validationResult(req);
@@ -127,8 +125,8 @@ const main = async () => {
 		}
 	);
 
-	apiRouters.post(
-		'/getuser',
+	app.post(
+		'/vlad/getuser',
 		body('id').notEmpty().escape().isNumeric().toInt(),
 		(req, res) => {
 			const errors = validationResult(req);
@@ -146,8 +144,6 @@ const main = async () => {
 			}
 		}
 	);
-
-	app.use('/vlad', apiRouters);
 
 	app.listen(PORT, () =>
 		console.log(`WebServer has been started on ${PORT} port`)
